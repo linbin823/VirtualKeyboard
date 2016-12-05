@@ -47,7 +47,7 @@ private:
     QList<QList<QPushButton*> >m_listCharsBtns; // A-Z Symbol
     QList<QList<QPushButton*> >m_listBtns;
     QVBoxLayout *m_mainLayout;
-    QPushButton *m_btnSpace; // 显示切换输入法
+    QPushButton *m_btnChange, *m_btnShift, *m_btnSymbol, *m_btnSpace; // 显示切换输入法
     CPinyinInputMethod m_pinyinInput;
 
     enum InputMode{ImEn, ImCn, ImNum};

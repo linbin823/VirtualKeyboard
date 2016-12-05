@@ -72,5 +72,5 @@ HEADERS +=\
     virtualkeyboard_global.h
 
 RESOURCES += \
-    images.qrc
+    res.qrc
 

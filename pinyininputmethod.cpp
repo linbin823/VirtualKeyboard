@@ -9,7 +9,7 @@ CPinyinInputMethod::CPinyinInputMethod()
 {
     HanziModel.clear();
 
-    QSettings setter(":/images/pinyinEx.ini", QSettings::IniFormat);
+    QSettings setter(":/dict/pinyinEx.ini", QSettings::IniFormat);
 
     lstEN = setter.value("pyEn", lstEN).toStringList();
     if (lstEN.size() <= 1)
@@ -17,7 +17,7 @@ CPinyinInputMethod::CPinyinInputMethod()
         qDebug() << "Can't load pyEn!";
         return;
     }
-    bool ret = im_open_decoder("./data/dict_pinyin.dat", "./data/user.dat");
+    bool ret = im_open_decoder("./dict/dict_pinyin.dat", "./dict/user.dat");
     if (!ret)
     {
         qDebug() << "open dict faild";

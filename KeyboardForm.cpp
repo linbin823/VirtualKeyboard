@@ -1,5 +1,7 @@
 #include "KeyboardForm.h"
 #include <QKeyEvent>
+#include <QFontDatabase>
+#include <QApplication>
 
 const char *kbLetter = "qwertyuiopasdfghjklzxcvbnm";
 const char *kbSymbol = "1234567890=!@#$%^~*()-+/:;";
@@ -19,6 +21,14 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
 
     setWindowOpacity(1);
     setAttribute(Qt::WA_TranslucentBackground);
+    setStyleSheet("QLabel{font: bold normal 24px 'Consolas'} QWidget QPushButton{border-image: url(:/images/btn1.png); border-width: 5; font: bold normal } QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
+
+    QFontDatabase::addApplicationFont(":/FontAwesome.otf");
+    QFont icofont("FontAwesome");
+    icofont.setPixelSize(32);
+
+    QFont deffont("Consolas");
+    deffont.setPixelSize(24);
 
     m_inputMode = ImEn;
     m_isMousePress = false;
@@ -52,6 +62,7 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     for (int i = 0; i < 10; i++)
     {
         QPushButton *btn = new QPushButton;
+        btn->setFont(deffont);
         btn->setStyleSheet("QPushButton{border: none; border-image: none; font: 20px} QPushButton:focus{color: #ff8000; padding: -20;}");
         hl2->addWidget(btn);
         m_listHanzi.append(btn);
@@ -83,11 +94,13 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     {
         QPushButton *btn = new QPushButton(QString(QLatin1Char(kbLetter[idx++])));
         btn->setFixedSize(btnWidth, btnHeight);
+        btn->setFont(deffont);
         connect(btn, SIGNAL(clicked()), SLOT(slotBtnClicked()));
         hl3->addWidget(btn);
         list.append(btn);
     }
-    QPushButton *btnBack = new QPushButton("back");
+    QPushButton *btnBack = new QPushButton("\uf060");
+    btnBack->setFont(icofont);
     btnBack->setFixedSize(btnWidth*1.5, btnHeight);
     btnBack->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
     connect(btnBack, SIGNAL(clicked()), SLOT(backSpace()));
@@ -103,12 +116,14 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     for (int j = 0; j < 9; j++)
     {
         QPushButton *btn = new QPushButton(QString(QLatin1Char(kbLetter[idx++])));
+        btn->setFont(deffont);
         btn->setFixedSize(btnWidth, btnHeight);
         connect(btn, SIGNAL(clicked()), SLOT(slotBtnClicked()));
         hl6->addWidget(btn);
         list.append(btn);
     }
     QPushButton *btnEnter = new QPushButton("ENTER");
+    btnEnter->setFont(deffont);
     btnEnter->setFixedSize(btnWidth*2, btnHeight);
     btnEnter->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
     connect(btnEnter, SIGNAL(clicked()), SLOT(enter()));
@@ -121,30 +136,35 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     QHBoxLayout *hl5 = new QHBoxLayout;
     hl5->setSpacing(horizontalSpacing);
 
-    QPushButton* btnShift = new QPushButton("shift");
-    btnShift->setFixedSize(btnWidth*1.5, btnHeight);
-    btnShift->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
-    connect(btnShift, SIGNAL(clicked()), SLOT(shiftClicked()));
-    hl5->addWidget(btnShift);
+    m_btnShift = new QPushButton("\uf062");
+    m_btnShift->setFont(icofont);
+    m_btnShift->setFixedSize(btnWidth*1.5, btnHeight);
+    m_btnShift->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
+    connect(m_btnShift, SIGNAL(clicked()), SLOT(shiftClicked()));
+    hl5->addWidget(m_btnShift);
     for (int j = 0; j < 7; j++)
     {
         QPushButton *btn = new QPushButton(QString(QLatin1Char(kbLetter[idx++])));
+        btn->setFont(deffont);
         btn->setFixedSize(btnWidth, btnHeight);
         connect(btn, SIGNAL(clicked()), SLOT(slotBtnClicked()));
         hl5->addWidget(btn);
         list.append(btn);
     }
     QPushButton* btn = new QPushButton(",");
+    btn->setFont(deffont);
     btn->setFixedSize(btnWidth, btnHeight);
     connect(btn, SIGNAL(clicked()), SLOT(btnClicked()));
     hl5->addWidget(btn);
 
     btn = new QPushButton(".");
+    btn->setFont(deffont);
     btn->setFixedSize(btnWidth, btnHeight);
     connect(btn, SIGNAL(clicked()), SLOT(btnClicked()));
     hl5->addWidget(btn);
 
     btn = new QPushButton("/");
+    btn->setFont(deffont);
     btn->setFixedSize(btnWidth, btnHeight);
     connect(btn, SIGNAL(clicked()), SLOT(btnClicked()));
     hl5->addWidget(btn);
@@ -158,40 +178,45 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     hl4->setSpacing(horizontalSpacing);
     QList<QPushButton*> list2;
 
-    QPushButton* btnSymbol = new QPushButton(".123");
-    btnSymbol->setFixedSize(btnWidth*1.5, btnHeight);
-    btnSymbol->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
-    connect(btnSymbol, SIGNAL(clicked()), SLOT(changeSymbol()));
-    list2.append(btnSymbol);
-    hl4->addWidget(btnSymbol);
+    m_btnSymbol = new QPushButton(".123");
+    m_btnSymbol->setFont(deffont);
+    m_btnSymbol->setFixedSize(btnWidth*1.5, btnHeight);
+    m_btnSymbol->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
+    connect(m_btnSymbol, SIGNAL(clicked()), SLOT(changeSymbol()));
+    list2.append(m_btnSymbol);
+    hl4->addWidget(m_btnSymbol);
 
-    QPushButton* btnChange = new QPushButton(QIcon(":/images/change"), "");
-    btnChange->setIconSize(QSize(28, 28 ));
-    btnChange->setProperty("Mode", ImEn);
-    btnChange->setFixedSize(btnWidth*1.5, btnHeight);
-    btnChange->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
-    connect(btnChange, SIGNAL(clicked()), SLOT(changeInputMode()));
-    list2.append(btnChange);
-    hl4->addWidget(btnChange);
+    m_btnChange = new QPushButton("\uf0ac");
+    //btnChange->setIconSize(QSize(28, 28 ));
+    m_btnChange->setFont(icofont);
+    m_btnChange->setProperty("Mode", ImEn);
+    m_btnChange->setFixedSize(btnWidth*1.5, btnHeight);
+    m_btnChange->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
+    connect(m_btnChange, SIGNAL(clicked()), SLOT(changeInputMode()));
+    list2.append(m_btnChange);
+    hl4->addWidget(m_btnChange);
 
     m_btnSpace = new QPushButton("英文");  // 空格
+    m_btnSpace->setFont(deffont);
     m_btnSpace->setFixedHeight(btnHeight);
     connect(m_btnSpace, SIGNAL(clicked()), SLOT(space()));
     list2.append(m_btnSpace);
     hl4->addWidget(m_btnSpace);
 
-    QPushButton *btnHide = new QPushButton("'");
+    QPushButton *btnSplit = new QPushButton("'");
+    btnSplit->setFont(deffont);
+    btnSplit->setFixedSize(btnWidth*1.5, btnHeight);
+    connect(btnSplit, SIGNAL(clicked()), SLOT(slotBtnClicked()));
+    list2.append(btnSplit);
+    hl4->addWidget(btnSplit);
+
+    QPushButton *btnHide = new QPushButton("\uf11c\uf103");
+    btnHide->setFont(icofont);
     btnHide->setFixedSize(btnWidth*1.5, btnHeight);
-    connect(btnHide, SIGNAL(clicked()), SLOT(slotBtnClicked()));
+    btnHide->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
+    connect(btnHide, SIGNAL(clicked()), SLOT(hide()));
     list2.append(btnHide);
     hl4->addWidget(btnHide);
-
-    QPushButton *btnClose = new QPushButton("hide");
-    btnClose->setFixedSize(btnWidth*1.5, btnHeight);
-    btnClose->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
-    connect(btnClose, SIGNAL(clicked()), SLOT(hide()));
-    list2.append(btnClose);
-    hl4->addWidget(btnClose);
 
     m_listBtns.append(list2);
     m_mainLayout->addLayout(hl4);
@@ -204,7 +229,6 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     m_hanziPageCnt = 0;
     m_pyFrm->setFixedHeight(40);
     setFixedHeight(m_pyFrm->height() + m_labPyText->height() + m_btnFrm->height());
-    setStyleSheet("QLabel{font: bold normal 24px 'Consolas'} QPushButton{border-image: url(:/images/btn1.png); border-width: 5; font: bold normal 24px 'Consolas'} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
 }
 
 KeyboardForm::~KeyboardForm()
@@ -257,6 +281,10 @@ void KeyboardForm::setText(QString str)
 void KeyboardForm::shiftClicked()
 {
     m_isShiftInput = !m_isShiftInput;
+    m_inputMode = (InputMode)m_btnChange->property("Mode").toInt();
+    m_btnSpace->setText(m_inputMode == ImCn ? "拼音" : "英文");
+    m_btnSymbol->setText(".123");
+    m_btnShift->setStyleSheet(tr("QPushButton{color:#FFFFFF; border-image: url(:/images/btn%1.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}").arg(m_isShiftInput?3:2));
     m_hanziPageCnt = 0;
     m_txtPinYin->clear();
     displayHanzi();
@@ -268,13 +296,14 @@ void KeyboardForm::shiftClicked()
 
 void KeyboardForm::changeInputMode()
 {
-    sender()->setProperty("Mode", m_inputMode = sender()->property("Mode").toInt() == ImEn ? ImCn : ImEn);
-    m_pyFrm->setVisible(m_inputMode != ImNum);
+    m_btnChange->setProperty("Mode", m_inputMode = m_btnChange->property("Mode").toInt() == ImEn ? ImCn : ImEn);
+    //m_pyFrm->setVisible(true);
     m_hanziPageCnt = 0;
     m_txtPinYin->clear();
     displayHanzi();
     m_btnSpace->setText(m_inputMode == ImCn ? "拼音" : "英文");
     m_isShiftInput = false;
+    m_btnShift->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
     for (int i = 0, idx = 0; i < m_listCharsBtns.size(); i++)
         foreach (QPushButton* btn, m_listCharsBtns[i])
             btn->setText(QString(QLatin1Char(kbLetter[idx]))), idx++;
@@ -282,16 +311,30 @@ void KeyboardForm::changeInputMode()
 
 void KeyboardForm::changeSymbol()
 {
-    m_hanziPageCnt = 0;
-    m_txtPinYin->clear();
-    displayHanzi();
-    if (m_inputMode == ImCn)
-        m_listBtns.removeAt(0);
-    m_inputMode = ImNum;
-    m_btnSpace->setText("数字");
-    for (int i = 0, idx = 0; i < m_listCharsBtns.size(); i++)
-        foreach (QPushButton* btn, m_listCharsBtns[i])
-            btn->setText(QString(QLatin1Char(kbSymbol[idx++])));
+    if  (m_btnSymbol->text() == ".123") {
+        m_btnSymbol->setText("返回");
+        m_hanziPageCnt = 0;
+        m_txtPinYin->clear();
+        //m_pyFrm->hide();
+        m_isShiftInput = false;
+        m_btnShift->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
+        displayHanzi();
+        if (m_inputMode == ImCn)
+            m_listBtns.removeAt(0);
+        m_inputMode = ImNum;
+        m_btnSpace->setText("数字");
+        for (int i = 0, idx = 0; i < m_listCharsBtns.size(); i++)
+            foreach (QPushButton* btn, m_listCharsBtns[i])
+                btn->setText(QString(QLatin1Char(kbSymbol[idx++])));
+    }
+    else {
+        m_btnSymbol->setText(".123");
+        m_inputMode = (InputMode)m_btnChange->property("Mode").toInt();
+        m_btnSpace->setText(m_inputMode == ImCn ? "拼音" : "英文");
+        for (int i = 0, idx = 0; i < m_listCharsBtns.size(); i++)
+            foreach (QPushButton* btn, m_listCharsBtns[i])
+                btn->setText(QString(QLatin1Char(kbLetter[idx++])));
+    }
 }
 
 void KeyboardForm::space()
