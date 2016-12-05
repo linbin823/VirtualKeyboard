@@ -28,6 +28,11 @@ void KeyEventDispatcher::sendKeyToFocusItem(const QString &keyText)
         QCoreApplication::sendEvent(m_focusItem, new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, Qt::NoModifier));
         QCoreApplication::sendEvent(m_focusItem, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Return, Qt::NoModifier));
     }
+    else if (keyText == QString("&&"))
+    {
+        QCoreApplication::sendEvent(m_focusItem, new QKeyEvent(QEvent::KeyPress, 0, Qt::NoModifier, "&"));
+        QCoreApplication::sendEvent(m_focusItem, new QKeyEvent(QEvent::KeyRelease, 0, Qt::NoModifier, "&"));
+    }
     else if (keyText == QString("&CtrlC&"))
     {
         QCoreApplication::sendEvent(m_focusItem, new QKeyEvent(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier));
