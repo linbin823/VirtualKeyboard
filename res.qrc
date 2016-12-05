@@ -6,5 +6,6 @@
         <file>images/change.png</file>
         <file>font/FontAwesome.otf</file>
         <file>dict/pinyinEx.ini</file>
+        <file>dict/dict_pinyin.dat</file>
     </qresource>
 </RCC>

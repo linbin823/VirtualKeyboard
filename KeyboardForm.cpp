@@ -125,6 +125,7 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     QPushButton *btnBack = new QPushButton("\uf060");
     btnBack->setFont(icofont);
     btnBack->setFixedSize(btnWidth*0.8, btnHeight);
+    btnBack->setAutoRepeat(true);
     btnBack->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
     connect(btnBack, SIGNAL(clicked()), SLOT(backSpace()));
     hl3->addWidget(btnBack);
@@ -204,7 +205,7 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     hl4->setSpacing(horizontalSpacing);
     QList<QPushButton*> list2;
 
-    m_btnSymbol = new QPushButton(".123");
+    m_btnSymbol = new QPushButton(".?123");
     m_btnSymbol->setFont(deffont);
     m_btnSymbol->setFixedSize(btnWidth*1.5, btnHeight);
     m_btnSymbol->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
@@ -216,7 +217,7 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
     //btnChange->setIconSize(QSize(28, 28 ));
     m_btnChange->setFont(icofont);
     m_btnChange->setProperty("Mode", ImEn);
-    m_btnChange->setFixedSize(btnWidth*1.5, btnHeight);
+    m_btnChange->setFixedSize(btnWidth, btnHeight);
     m_btnChange->setStyleSheet("QPushButton{color:#FFFFFF; border-image: url(:/images/btn2.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}");
     connect(m_btnChange, SIGNAL(clicked()), SLOT(changeInputMode()));
     list2.append(m_btnChange);
@@ -231,7 +232,7 @@ KeyboardForm::KeyboardForm(QWidget *parent) :
 
     QPushButton *btnSplit = new QPushButton("'");
     btnSplit->setFont(deffont);
-    btnSplit->setFixedSize(btnWidth*1.5, btnHeight);
+    btnSplit->setFixedSize(btnWidth, btnHeight);
     connect(btnSplit, SIGNAL(clicked()), SLOT(slotBtnClicked()));
     list2.append(btnSplit);
     hl4->addWidget(btnSplit);
@@ -309,7 +310,7 @@ void KeyboardForm::shiftClicked()
     m_isShiftInput = !m_isShiftInput;
     m_inputMode = (InputMode)m_btnChange->property("Mode").toInt();
     m_btnSpace->setText(m_inputMode == ImCn ? "拼音" : "英文");
-    m_btnSymbol->setText(".123");
+    m_btnSymbol->setText(".?123");
     m_btnShift->setStyleSheet(tr("QPushButton{color:#FFFFFF; border-image: url(:/images/btn%1.png); border-width: 5;} QPushButton:pressed{border-image: url(:/images/btn3.png); border-width: 5;}").arg(m_isShiftInput?3:2));
     m_hanziPageCnt = 0;
     m_txtPinYin->clear();
@@ -324,7 +325,7 @@ void KeyboardForm::changeInputMode()
 {
     m_btnChange->setProperty("Mode", m_inputMode = m_btnChange->property("Mode").toInt() == ImEn ? ImCn : ImEn);
     //m_pyFrm->setVisible(true);
-    m_btnSymbol->setText(".123");
+    m_btnSymbol->setText(".?123");
     m_hanziPageCnt = 0;
     m_txtPinYin->clear();
     displayHanzi();
@@ -338,7 +339,7 @@ void KeyboardForm::changeInputMode()
 
 void KeyboardForm::changeSymbol()
 {
-    if  (m_btnSymbol->text() == ".123") {
+    if  (m_btnSymbol->text() == ".?123") {
         m_btnSymbol->setText("返回");
         m_hanziPageCnt = 0;
         m_txtPinYin->clear();
@@ -355,7 +356,7 @@ void KeyboardForm::changeSymbol()
                 btn->setText(kbSymbol[++idx] == '&' ? "&&" : QString(QLatin1Char(kbSymbol[idx])));
     }
     else {
-        m_btnSymbol->setText(".123");
+        m_btnSymbol->setText(".?123");
         m_inputMode = (InputMode)m_btnChange->property("Mode").toInt();
         m_btnSpace->setText(m_inputMode == ImCn ? "拼音" : "英文");
         for (int i = 0, idx = 0; i < m_listCharsBtns.size(); i++)
