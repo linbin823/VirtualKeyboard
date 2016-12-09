@@ -7,3 +7,5 @@
    将 VirtualKeyboard.so(.dll) 放入其中；
 4、将代码文件夹中 dict 整个文件夹复制到Qt5Demo.exe所在目录；
 5、最后运行 Qt5Demo.exe 即可。
+
+20161209	Qt5.0 ~ Qt5.5 可以用。邓艾更新

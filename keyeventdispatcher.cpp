@@ -1,4 +1,4 @@
-#include <QInputMethodEvent>
+﻿#include <QInputMethodEvent>
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include "keyeventdispatcher.h"

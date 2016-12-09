@@ -17,7 +17,7 @@ INCLUDEPATH += $$PWD/pinyin
 DEFINES += VIRTUALKEYBOARD_LIBRARY
 
 win32 {
-    DESTDIR = D:/code/qt/build-changeImage/platforminputcontexts
+    DESTDIR = C:/CL/Qt.reference.2016.VirtualKeyboard/build/platforminputcontexts
     OBJECTS_DIR = $$DESTDIR/obj
     MOC_DIR = $$DESTDIR/moc
 }
